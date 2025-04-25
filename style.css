@@ -1,0 +1,281 @@
+@layer cosmetics, utilities, demo;
+
+@layer demo {
+  body {
+    height: 100dvh;
+    display: grid;
+    place-content: center;
+  }
+
+  .world {
+    --bands: 130;
+    --cells: 60;
+    --_size: 80;
+    --size: calc(var(--_size) * 1dvmin);
+    --_speed: 15;
+    --speed: calc((20.5 - var(--_speed)) * 1s);
+    --image: url(https://assets.codepen.io/25387/Gall_Stereographic_projection_SW_centered.jpg);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    clip-path: circle();
+  }
+
+  .band {
+    --latitude: calc(sin(PI / var(--bands) * var(--i)) * 1.2);
+    --width: calc(var(--size) * var(--latitude));
+    width: var(--width);
+    height: calc(var(--size) / var(--bands) * var(--latitude));
+    display: flex;
+    justify-content: center;
+  }
+
+  .cell {
+    --longitude: calc(sin(PI / var(--cells) * var(--j)) * 1.2);
+    --bg-width: calc(var(--width) * var(--longitude) * 1.25);
+    --bg-height: calc(var(--size) * 0.9);
+    height: calc(var(--size) * var(--longitude));
+    width: calc(var(--width) / var(--cells) * var(--longitude));
+    background: var(--image) 50% fixed;
+    background-size:
+      var(--bg-width)
+      var(--bg-height);
+    animation: spin var(--speed) linear infinite;
+  }
+  
+  .with-borders .cell {
+    box-shadow: 0 0 0 1px chartreuse;
+  }
+
+  @keyframes spin {
+    100% {
+      background-position-x: calc(50% + var(--bg-width));
+    }
+  }
+}
+
+@layer cosmetics {
+  body {
+    overflow: hidden;
+    margin: 0;
+    background: #fff8dc;
+    position: relative;
+    z-index: 1; /* Ensure cosmetics, utilities, demo are at the bottom */
+  }
+
+  .world::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: cornsilk;
+    opacity: .5;
+    mix-blend-mode: color;
+  }
+}
+
+@layer utilities {
+  .utilities {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    padding: 1em;
+  }
+
+  .utilities .control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 24px;
+    gap: .5em;
+    font-size: 1.1em;
+    font-family: monospace;
+    font-variant: small-caps;
+    letter-spacing: .05em;
+  }
+
+  .utilities #image:has(:focus) {
+    border: 2px solid royalblue;
+  }
+
+  .utilities #image input {
+    position: absolute;
+    top: -100dvh;
+    left: -100dvw;
+    opacity: 0;
+  }
+
+  .utilities .image-wrapper {
+    --color-1: #ddd;
+    --color-2: royalblue;
+    position: relative;
+    width: max(10dvmin, 48px);
+    height: max(10dvmin, 48px);
+    color: var(--color-1);
+  }
+
+  .utilities .image-wrapper a {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    translate: 30% 30%;
+    width: 30%;
+    height: 30%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    text-decoration: none;
+    background: var(--color-1);
+    color: var(--color-2);
+    border-radius: 50%;
+  }
+
+  .utilities .image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: .5dvmin solid var(--color-1);
+  }
+
+  .utilities #image :checked + .image-wrapper {
+    --color-1: royalblue;
+    --color-2: #ddd;
+  }
+
+  .utilities #image :checked + .image-wrapper a {
+    display: inline-flex;
+  }
+
+  .menu {
+    position: absolute;
+    top: 25px; /* 選單往下移，調整此值可改變垂直位置 */
+    left: 10px; /* 選單向右移動 10px */
+    display: flex;
+    gap: 1em;
+    margin: 0;
+    padding: 1.25em;
+    list-style: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 2px solid #096c9d; /* 修復選單邊框 */
+    z-index: 3; /* 確保選單在最上層 */
+  }
+
+  .menu .dropdown {
+    position: relative;
+  }
+
+  .menu .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0.5em;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 55px; /* 子選單範圍加寬，調整此值可改變寬度 */
+  }
+
+  .menu .dropdown:hover .submenu {
+    display: block;
+  }
+
+  .menu li a {
+    text-decoration: none;
+    font-size: 1em;
+    color: #baa5ff;
+    font-family: Arial, sans-serif;
+  }
+
+  .menu li a:hover {
+    color: #c4c6e7;
+  }
+
+  .content-frame {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    z-index: 2; /* Ensure iframe is below the menu */
+    display: block; /* Ensure iframe is visible by default */
+  }
+
+  .menu {
+    position: absolute;
+    top: 30px; /* 選單往下移，調整此值可改變垂直位置 */
+    left: 10px; /* 選單向右移動 10px */
+    display: flex;
+    gap: 1em;
+    margin: 0;
+    padding: 1em;
+    list-style: none;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 2px solid #096c9d; /* 修復選單邊框 */
+    z-index: 3; /* 確保選單在最上層 */
+  }
+
+  .menu li a {
+    text-decoration: none;
+    font-size: 1.05em;
+    color: #096c9d; /* Updated initial color */
+    font-family: Arial, sans-serif;
+  }
+
+  .menu li a:hover {
+    color: #b6d3e2; /* Updated hover effect color */
+  }
+
+  .intro-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    z-index: 2; /* Ensure it is below the menu but above other content */
+    display: none; /* Hidden by default */
+  }
+
+  .video-container {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    z-index: 2; /* Ensure it is above other content but below the menu */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .video-container video {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
+
+  .quiz-frame {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    z-index: 2; /* Ensure iframe is below the menu */
+    display: none; /* Hidden by default */
+  }
+}

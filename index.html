@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sketch</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+    <div class="loader-container">
+      <div class="world">
+        <!--
+        Here will come many times of:
+        <div class="band" style="--i: i">
+          <div class="cell" style="--j: j"></div>
+        </div>
+        -->
+      </div>
+      
+      <!-- Parameter playground -->
+      <div class="utilities">
+        <div class="control">
+          <label for="bands">bands</label>
+          <input type="range" id="bands" min="2" max="160" value="90">
+          
+        </div>
+        <div class="control">
+          <label for="cells">cells</label>
+          <input type="range" id="cells" min="3" max="100" value="60">
+        </div>
+        <div class="control">
+          <label for="size">&nbsp;size</label>
+          <input type="range" id="size" min="5" max="120" value="90">
+        </div>
+        <div class="control">
+          <label for="speed">speed</label>
+          <input type="range" id="speed" min="1" max="20" value="15">
+        </div>
+        <fieldset id="image" class="control">
+          <legend>texture</legend>
+          <label>
+            <input type="radio" checked name="image" value="url(https://assets.codepen.io/25387/Gall_Stereographic_projection_SW_centered.jpg)">
+            <div class="image-wrapper">
+              <img src="https://assets.codepen.io/25387/Gall_Stereographic_projection_SW_centered.jpg" alt="world map">
+              <a href="https://en.wikipedia.org/wiki/Gall_stereographic_projection" target="_blank" title="source">↗</a>
+            </div>
+          </label>
+          <label>
+            <input type="radio" name="image" value="url(https://assets.codepen.io/25387/convergence-screenshot.jpg)">
+            <div class="image-wrapper">
+            <img src="https://assets.codepen.io/25387/convergence-screenshot.jpg" alt="convergence">
+              <a href="https://codepen.io/pavlovsk/pen/zYXBEeR" target="_blank" title="source">↗</a>
+            </div>
+          </label>
+          <label>
+            <input type="radio" name="image" value="url(https://assets.codepen.io/25387/smiley.png)">
+            <div class="image-wrapper">
+            <img src="https://assets.codepen.io/25387/smiley.png" alt="convergence">
+              <a href="https://www.google.com/search?q=smiley+face+sphere+texture&tbs=imgo:1&udm=2#vhid=B2Ahxik8MU8_1M&vssid=mosaic" target="_blank" title="source">↗</a>
+            </div>
+          </label>
+        </fieldset>
+        <div class="control">
+          <label for="with-border">borders</label>
+          <input type="checkbox" id="with-border">
+        </div>
+        <div class="control">
+          <label for="optimize">optimize</label>
+          <input type="checkbox" id="optimize" checked>
+        </div>
+      </div>
+
+  </head>
+
+  <body>
+    <nav>
+      <ul class="menu">
+        <li><a href="#home" onclick="showHome()">首頁</a></li>
+        <li><a href="#intro" onclick="showIntroPage('https://lkaway96.github.io/introduce/')">自我介紹</a></li>
+        <li class="dropdown">
+          <a href="#portfolio">作品集</a>
+          <ul class="submenu">
+            <li><a href="https://lkaway96.github.io/fweek/" target="content-frame" onclick="showIframe()">第一週</a></li>
+            <li><a href="https://lkaway96.github.io/sweek/" target="content-frame" onclick="showIframe()">第二週</a></li>
+            <li><a href="https://lkaway96.github.io/tweek/" target="content-frame" onclick="showIframe()">第三週</a></li>
+            <li><a href="https://lkaway96.github.io/250328/" target="content-frame" onclick="showIframe()">第四週</a></li>
+          </ul>
+        </li>
+        <li><a href="#quiz" onclick="showQuiz()">測驗卷</a></li>
+        <li><a href="#video" onclick="showVideo('「General」中的會議-20250411_095402-會議錄製.mp4')">教學影片</a></li>
+      </ul>
+      
+    </nav>
+    <iframe id="introIframe" class="intro-frame"></iframe>
+    <iframe name="content-frame" class="content-frame"></iframe>
+    <iframe id="quizIframe" class="quiz-frame"></iframe>
+    <div id="videoContainer" class="video-container">
+      <video id="embeddedVideo" controls></video>
+      <button onclick="hideVideo()" style="position: absolute; top: 10px; right: 10px; z-index: 3;">Close</button>
+    </div>
+    <div id="quizContainer" style="display: none;">
+      <div id="question"></div>
+      <div id="options"></div>
+      <button id="nextButton" style="display: none;">下一題</button>
+    </div>
+    <script src="sketch.js"></script>
+    <script>
+      function hideIframe() {
+        const iframe = document.querySelector('.content-frame');
+        iframe.style.display = 'none'; // 隱藏 iframe
+      }
+
+      function showIframe() {
+        const iframe = document.querySelector('.content-frame');
+        iframe.style.display = 'block'; // 顯示 iframe
+      }
+
+      function showIntroPage(url) {
+        const iframe = document.getElementById('introIframe');
+        iframe.src = url;
+        iframe.style.display = 'block'; // 顯示 iframe
+      }
+    </script>
+  </body>
+</html>
